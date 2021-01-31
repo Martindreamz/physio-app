@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-physioapp-dev-163421-authRole",
+      "UnauthRoleArn": "arn:aws:iam::071234665381:role/amplify-physioapp-dev-163421-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::071234665381:role/amplify-physioapp-dev-163421-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-physioapp-dev-163421-deployment",
+      "UnauthRoleName": "amplify-physioapp-dev-163421-unauthRole",
+      "StackName": "amplify-physioapp-dev-163421",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:071234665381:stack/amplify-physioapp-dev-163421/237cbf60-639f-11eb-bc02-02fec3e1d326",
+      "AmplifyAppId": "d1xzvc6lgud3fp"
+    }
+  }
+}
