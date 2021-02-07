@@ -9,7 +9,7 @@ import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 Amplify.configure(awsconfig);
-
+//git log --all --graph --oneline --decorate
 
 
 ReactDOM.render(
