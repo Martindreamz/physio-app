@@ -6,6 +6,7 @@ import Modal from 'react-modal'
 import CustModal from './CustModal'
 Modal.setAppElement('#root')
 
+//coming from laptop
 const styles = {
   wrap: {
     display: "flex"
