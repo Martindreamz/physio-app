@@ -4,6 +4,8 @@ import "./CalendarStyles.css";
 import axios from 'axios';
 import Modal from 'react-modal'
 import CustModal from './CustModal'
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+
 Modal.setAppElement('#root')
 
 //coming from laptop
@@ -163,6 +165,7 @@ class App extends Component {
     var { ...config } = this.state;
     return (
       <div>
+        <AmplifySignOut/>
         <div>
           {/* <Modal 
             isOpen={this.state.isOpen}
@@ -211,4 +214,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withAuthenticator(App);

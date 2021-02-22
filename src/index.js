@@ -102,7 +102,7 @@ async function signOut() {
 
 ReactDOM.render(
   <React.StrictMode>
-    <AmplifySignOut />
+    {/* <AmplifySignOut /> */}
     <App />
   </React.StrictMode>,
   document.getElementById('root')
