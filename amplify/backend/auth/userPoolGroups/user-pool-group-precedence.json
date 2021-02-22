@@ -1,10 +1,6 @@
 [
     {
-        "groupName": "PhysioEficaz2",
-        "precedence": 1
-    },
-    {
         "groupName": "PhysioEficaz",
-        "precedence": 2
+        "precedence": 1
     }
 ]
