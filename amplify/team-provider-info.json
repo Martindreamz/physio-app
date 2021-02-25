@@ -13,7 +13,17 @@
     },
     "categories": {
       "auth": {
-        "physioapp4b50bd08": {}
+        "physioapp4b50bd08": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "physioapp4b50bd08CustomMessage": {
+          "REDIRECTURL": "HTTPS://welcome",
+          "EMAILSUBJECT": "welcome to new acc",
+          "EMAILMESSAGE": "click this link",
+          "deploymentBucketName": "amplify-physioapp-dev-163421-deployment",
+          "s3Key": "amplify-builds/physioapp4b50bd08CustomMessage-4a415174624f67524a6f-build.zip"
+        }
       }
     }
   }
