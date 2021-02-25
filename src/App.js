@@ -107,7 +107,7 @@ class App extends Component {
     // console.log(out)
     return out
   }
-  getAllBookings() {
+  getAllBookings() { //change this to per month instead of per current week
     let today = new Date();
     let dateNumber = today.getDay();
     let lastSunday = today.setDate(today.getDate() - dateNumber)
