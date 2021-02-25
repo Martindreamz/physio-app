@@ -112,6 +112,8 @@ class App extends Component {
   getAllBookings() { //change this to per month instead of per current week
     let today = new Date();
     let dateNumber = today.getDay();
+    let monthNumber = today.getMonth();
+    let yearNumber = today.getFullYear();
     let lastSunday = today.setDate(today.getDate() - dateNumber)
     let lastSundayDate = new Date(lastSunday)
     let lastSunDateTime = this.dateFormatter(lastSundayDate / 1000).substring(0, 10) + "T00:00:00.000Z"
@@ -120,10 +122,28 @@ class App extends Component {
     let nextSaturdayDate = new Date(nextSaturday)
     let nextSaturDateTime = this.dateFormatter(nextSaturdayDate / 1000).substring(0, 10) + "T00:00:00.000Z"
     console.log("next saturdate", nextSaturDateTime)
+    switch (monthNumber) {
+      case 1:
+      case 3:
+      case 5:
+      case 7:
+      case 8:
+      case 10:
+      case 12: dateNumber = 31; break;
+      case 2: dateNumber = yearNumber % 4 == 0 ? 29 : 28
+      default: dateNumber = 30; break;
+    }
 
+    lastSunDateTime = this.dateFormatter(new Date(yearNumber,monthNumber,1) / 1000).substring(0, 10)+"T00:00:00.000Z"
+    console.log("last sundate", lastSunDateTime)
+
+    nextSaturDateTime= this.dateFormatter(new Date(yearNumber,monthNumber,dateNumber) / 1000).substring(0, 10)+"T00:00:00.000Z"
+    console.log("next saturdate", nextSaturDateTime)
 
     let sundayToSend = ((new Date(lastSunDateTime)) / 1000 + 3600 * 7)
     let saturdayToSend = ((new Date(nextSaturDateTime)) / 1000 + 3600 * 7)
+
+
     console.log("sundayToSend", sundayToSend, "saturdayToSend", saturdayToSend)
     axios.get("https://0q7lvp0ual.execute-api.ap-northeast-2.amazonaws.com/dev/getbookingbystarttimeandendtime?StartTime=" + sundayToSend + "&EndTime=" + saturdayToSend)
       .then(response => {
@@ -165,18 +185,17 @@ class App extends Component {
     var { ...config } = this.state;
     return (
       <div>
-        <AmplifySignOut/>
         <div>
           {/* <Modal 
             isOpen={this.state.isOpen}
             onRequestClose={this.showModal}
             shouldCLooseOnOverlayClick={this.hideModal}>
-                <h1>Modal Title</h1>
-                <h2>Modal Body</h2>
-                <h4>Start date {this.state.modalStartDate}</h4>
-                <h4>End date {this.state.modalEndDate}</h4>
-                <button onClick={this.hideModal}></button>
-            </Modal> */}
+            <h1>Modal Title</h1>
+            <h2>Modal Body</h2>
+            <h4>Start date {this.state.modalStartDate}</h4>
+            <h4>End date {this.state.modalEndDate}</h4>
+            <button onClick={this.hideModal}></button>
+          </Modal> */}
           <CustModal
             isOpen={this.state.isOpen}
             onRequestClose={this.showModal}
@@ -208,6 +227,7 @@ class App extends Component {
                 this.calendar = component && component.control;
               }}
             />
+          <AmplifySignOut />
           </div>
         </div></div>
     );
@@ -215,3 +235,4 @@ class App extends Component {
 }
 
 export default withAuthenticator(App);
+// export default App;
