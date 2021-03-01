@@ -3,12 +3,13 @@ import { DayPilot, DayPilotCalendar, DayPilotNavigator } from "daypilot-pro-reac
 import "./CalendarStyles.css";
 import axios from 'axios';
 import Modal from 'react-modal'
-import CustModal from './CustModal'
+import AddBookingModal from './AddBookingModal'
+import AddCustomerModal from './AddCustomerModal'
+import EditBookingModal from './EditBookingModal'
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 
 Modal.setAppElement('#root')
 
-//coming from laptop
 const styles = {
   wrap: {
     display: "flex"
@@ -31,67 +32,75 @@ class App extends Component {
       timeRangeSelectedHandling: "Enabled",
       onTimeRangeSelected: args => {
         this.calendar.clearSelection();
-        // console.log(typeof(args.start)+" "+ args.start)
-        // console.log(typeof(args.end)+" "+ args.end)      
-        // console.log(args.end.value)      
-
         this.setState({
           modalStartDate: args.start.value,
           modalEndDate: args.end.value,
-          isOpen: true
+          isBookingModalOpen: true
         })
-        // DayPilot.Modal.prompt("Create a new event hello:", "Event 1").then(function (modal) {
-        //   dp.clearSelection();
-        //   if (!modal.result) { return; }
-        //   dp.events.add(new DayPilot.Event({
-        //     start: args.start,
-        //     end: args.end,
-        //     id: DayPilot.guid(),
-        //     text: modal.result
-        //   }));
-        // });
+
       },
-      // onTimeRangeSelected: args => {
-      // <Modal 
-      // isOpen={this.state.isOpen}
-      // onRequestClose={this.showModal}
-      // shouldCLooseOnOverlayClick={this.hideModal}>
-      //     <h1>Modal Title</h1>
-      //     <h2>Modal Body</h2>
-      //     <button onClick={this.hideModal}></button>
-      // </Modal>
-      // },
-      eventDeleteHandling: "Update",
       onEventClick: args => {
-        let dp = this.calendar;
-        DayPilot.Modal.prompt("Update event text:", args.e.text()).then(function (modal) {
-          if (!modal.result) { return; }
-          args.e.data.text = modal.result;
-          dp.events.update(args.e);
-        });
+        this.setState({
+          EditBookingStartDate: args.e.data.start.value,
+          EditBookingEndDate: args.e.data.end.value,
+        EditBookingName:args.e.data.text,
+        EditBookingId:args.e.data.id,
+          isEditBookingModalOpen: true
+        })
       },
       events: [],
-      isOpen: false,
+      isBookingModalOpen: false,
+      isCustomerModalOpen:false,
       modalStartDate: "",
-      modalEndDate: ""
+      modalEndDate: "",
+      isEditBookingModalOpen:false,
+      EditBookingStartDate:"",
+      EditBookingEndDate:"",
+      EditBookingId:"",
+      EditBookingName:""
     };
 
-    this.showModal = this.showModal.bind(this);
-    this.hideModal = this.hideModal.bind(this);
+    this.showBookingModal = this.showBookingModal.bind(this);
+    this.hideBookingModal = this.hideBookingModal.bind(this);
+    this.showCustomerModal = this.showCustomerModal.bind(this);
+    this.hideCustomerModal = this.hideCustomerModal.bind(this);
+    this.showEditBookingModal=this.showEditBookingModal.bind(this);
+    this.hideEditBookingModal = this.hideEditBookingModal.bind(this);
     this.dateFormatter = this.dateFormatter.bind(this);
     this.getAllBookings = this.getAllBookings.bind(this);
   }
 
-  showModal = () => {
-    this.setState({ isOpen: true });
+  showBookingModal = () => {
+    this.setState({ isBookingModalOpen: true });
     this.getAllBookings();
-    // console.log("i am clicked")
+    console.log("showBookingModal clicked")
   };
 
-  hideModal = () => {
-    this.setState({ isOpen: false });
+  hideBookingModal = () => {
+    this.setState({ isBookingModalOpen: false });
+
     this.getAllBookings();
-    // console.log("i am clicked")
+    console.log("hideBookingModal clicked")
+  };
+
+  showCustomerModal = () => {
+    this.setState({ isCustomerModalOpen: true });
+    console.log("showCustomerModal clicked")
+  };
+
+  hideCustomerModal = () => {
+    this.setState({ isCustomerModalOpen: false });    
+    console.log("hideCustomerModal clicked")
+  };
+  
+  showEditBookingModal = () => {
+    this.setState({ isEditBookingModalOpen: true });
+    console.log("showEditBookingModal clicked")
+  };
+
+  hideEditBookingModal = () => {
+    this.setState({ isEditBookingModalOpen: false });    
+    console.log("hideEditBookingModal clicked")
   };
 
   dateFormatter(input) {
@@ -117,11 +126,11 @@ class App extends Component {
     let lastSunday = today.setDate(today.getDate() - dateNumber)
     let lastSundayDate = new Date(lastSunday)
     let lastSunDateTime = this.dateFormatter(lastSundayDate / 1000).substring(0, 10) + "T00:00:00.000Z"
-    console.log("last sundate", lastSunDateTime)
+    // console.log("last sundate", lastSunDateTime)
     let nextSaturday = lastSundayDate.setDate(lastSundayDate.getDate() + 6)
     let nextSaturdayDate = new Date(nextSaturday)
     let nextSaturDateTime = this.dateFormatter(nextSaturdayDate / 1000).substring(0, 10) + "T00:00:00.000Z"
-    console.log("next saturdate", nextSaturDateTime)
+    // console.log("next saturdate", nextSaturDateTime)
     switch (monthNumber) {
       case 1:
       case 3:
@@ -134,20 +143,20 @@ class App extends Component {
       default: dateNumber = 30; break;
     }
 
-    lastSunDateTime = this.dateFormatter(new Date(yearNumber,monthNumber,1) / 1000).substring(0, 10)+"T00:00:00.000Z"
-    console.log("last sundate", lastSunDateTime)
+    lastSunDateTime = this.dateFormatter(new Date(yearNumber, monthNumber, 1) / 1000).substring(0, 10) + "T00:00:00.000Z"
+    // console.log("last sundate", lastSunDateTime)
 
-    nextSaturDateTime= this.dateFormatter(new Date(yearNumber,monthNumber,dateNumber) / 1000).substring(0, 10)+"T00:00:00.000Z"
-    console.log("next saturdate", nextSaturDateTime)
+    nextSaturDateTime = this.dateFormatter(new Date(yearNumber, monthNumber, dateNumber) / 1000).substring(0, 10) + "T00:00:00.000Z"
+    // console.log("next saturdate", nextSaturDateTime)
 
     let sundayToSend = ((new Date(lastSunDateTime)) / 1000 + 3600 * 7)
     let saturdayToSend = ((new Date(nextSaturDateTime)) / 1000 + 3600 * 7)
 
 
-    console.log("sundayToSend", sundayToSend, "saturdayToSend", saturdayToSend)
+    // console.log("sundayToSend", sundayToSend, "saturdayToSend", saturdayToSend)
     axios.get("https://0q7lvp0ual.execute-api.ap-northeast-2.amazonaws.com/dev/getbookingbystarttimeandendtime?StartTime=" + sundayToSend + "&EndTime=" + saturdayToSend)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         const thisEvents = response.data.message1.Items.map(items => {
           return {
             'id': items.ID,
@@ -161,6 +170,16 @@ class App extends Component {
       })
       .catch(error => console.error(error))
   }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.events != this.state.events) {
+        console.log("events added, now have ", this.state.events.length)
+        this.setState({ events: this.state.events })
+    } else {
+        console.log("no change")
+    }
+  }
+
   componentDidMount() {
     this.getAllBookings()
     let today = new Date();
@@ -186,26 +205,33 @@ class App extends Component {
     return (
       <div>
         <div>
-          {/* <Modal 
-            isOpen={this.state.isOpen}
-            onRequestClose={this.showModal}
-            shouldCLooseOnOverlayClick={this.hideModal}>
-            <h1>Modal Title</h1>
-            <h2>Modal Body</h2>
-            <h4>Start date {this.state.modalStartDate}</h4>
-            <h4>End date {this.state.modalEndDate}</h4>
-            <button onClick={this.hideModal}></button>
-          </Modal> */}
-          <CustModal
-            isOpen={this.state.isOpen}
-            onRequestClose={this.showModal}
-            shouldCLooseOnOverlayClick={this.hideModal}
-            onClickFunction={this.hideModal}
+          <AddCustomerModal
+            isOpen={this.state.isCustomerModalOpen}
+            onRequestClose={this.showCustomerModal}
+            shouldCLooseOnOverlayClick={this.hideCustomerModal}
+            onClickFunction={this.hideCustomerModal}
+          />
+          <EditBookingModal
+            isOpen={this.state.isEditBookingModalOpen}
+            onRequestClose={this.hideEditBookingModal}
+            shouldCloseOnOverlayClick={false}
+            onClickFunction={this.hideEditBookingModal}
+            EditBookingStartDate={this.state.EditBookingStartDate}
+            EditBookingEndDate={this.state.EditBookingEndDate}
+            EditBookingName={this.state.EditBookingName}
+            EditBookingId={this.state.EditBookingId}
+          />
+          <AddBookingModal
+            isOpen={this.state.isBookingModalOpen}
+            onRequestClose={this.showBookingModal}
+            shouldCLooseOnOverlayClick={this.hideBookingModal}
+            onClickFunction={this.hideBookingModal}
             modalStartDate={this.state.modalStartDate}
+            getAllBookings={this.getAllBookings}
             modalEndDate={this.state.modalEndDate} />
         </div>
-        <button onClick={this.showModal}>
-          Open
+        <button onClick={this.showCustomerModal}>
+          Add New Customer
         </button>
         <div style={styles.wrap}>
           <div style={styles.left}>
@@ -227,7 +253,7 @@ class App extends Component {
                 this.calendar = component && component.control;
               }}
             />
-          <AmplifySignOut />
+            <AmplifySignOut />
           </div>
         </div></div>
     );

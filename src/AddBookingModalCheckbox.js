@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class CustModalCheckbox extends Component {
+class AddBookingModalCheckbox extends Component {
     constructor() {
         super()
     }
@@ -20,4 +20,4 @@ class CustModalCheckbox extends Component {
     }
 
 }
-export default CustModalCheckbox
+export default AddBookingModalCheckbox

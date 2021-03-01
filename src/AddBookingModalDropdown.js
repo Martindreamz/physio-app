@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class CustModalDropdown extends Component {
+class AddBoookingDropdown extends Component {
     constructor() {
         super()
       
@@ -18,4 +18,4 @@ class CustModalDropdown extends Component {
     }
 
 }
-export default CustModalDropdown
+export default AddBoookingDropdown

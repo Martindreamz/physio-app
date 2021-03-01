@@ -2,10 +2,10 @@ import './Modal.css';
 import React, { Component } from 'react';
 import Modal from 'react-modal'
 import axios from 'axios'
-import CustModalCheckbox from './CustModalCheckbox'
-import CustModalDropdown from './CustModalDropdown'
+import CustModalCheckbox from './AddBookingModalCheckbox'
+import CustModalDropdown from './AddBookingModalDropdown'
 
-class CustModal extends Component {
+class AddBookingModal extends Component {
     constructor(props) {
         super()
         this.state = {
@@ -105,7 +105,7 @@ class CustModal extends Component {
                         'Name': item.Name
                     }
                 })
-                console.log("get all custoomers ", freshAllCustomers)
+                // console.log("get all custoomers ", freshAllCustomers)
                 // .map(items => items.Name)
                 this.setState({
                     allCustomers: freshAllCustomers,
@@ -156,6 +156,7 @@ class CustModal extends Component {
             })
 
 
+        setTimeout(this.props.getAllBookings(), 5000);
         this.props.onClickFunction();
     }
     componentDidMount() {
@@ -164,7 +165,7 @@ class CustModal extends Component {
     }
 
     render() {
-        console.log("inside render customers = " + this.state.customers)
+        // console.log("inside render customers = " + this.state.customers)
         const torender = this.state.customers.map(item =>
             // console.log(item.Id+" "+item.Name))
             <CustModalCheckbox
@@ -221,6 +222,6 @@ class CustModal extends Component {
         )
     }
 }
-export default CustModal
+export default AddBookingModal
 
 
