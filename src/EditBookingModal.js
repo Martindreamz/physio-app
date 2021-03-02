@@ -19,6 +19,10 @@ class EditBookingModal extends Component {
 
 deleteBooking(){
     console.log('deleting',this.props.EditBookingId)
+    axios.post("https://0q7lvp0ual.execute-api.ap-northeast-2.amazonaws.com/dev/deletebooking?deleteId="+ this.props.EditBookingId)
+    .then(function (response) {
+        console.log(response);
+    })
     this.props.onClickFunction()
 }
 
